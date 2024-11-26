@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_2024_WpfApp5"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="2023小作家ver1" Height="450" Width="800">
     <Grid>
+        <Button Content="開啟新文件" HorizontalAlignment="Left" Margin="145,79,0,0" VerticalAlignment="Top" Height="74" Width="140" FontSize="18" FontWeight="Bold" Click="Button_Click"/>
 
     </Grid>
 </Window>
