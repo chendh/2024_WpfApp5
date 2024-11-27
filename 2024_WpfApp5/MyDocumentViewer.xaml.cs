@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using Microsoft.Win32;
+using System.IO;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -34,12 +35,36 @@ namespace _2024_WpfApp5
 
         private void OpenCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Rich Text Format (*.rtf)|*.rtf|All files (*.*)|*.*";
+            openFileDialog.DefaultExt = ".rtf";
+            openFileDialog.AddExtension = true;
 
+            if (openFileDialog.ShowDialog() == true)
+            {
+                FileStream fileStream = new FileStream(openFileDialog.FileName, FileMode.Open);
+                TextRange range = new TextRange(documentRichTextBox.Document.ContentStart, documentRichTextBox.Document.ContentEnd);
+                range.Load(fileStream, DataFormats.Rtf);
+                fileStream.Close();
+            }
         }
 
         private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Rich Text Format (*.rtf)|*.rtf|All files (*.*)|*.*";
+            saveFileDialog.DefaultExt = ".rtf";
+            saveFileDialog.AddExtension = true;
 
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                TextRange range;
+                FileStream fileStream;
+                range = new TextRange(documentRichTextBox.Document.ContentStart, documentRichTextBox.Document.ContentEnd);
+                fileStream = new FileStream(saveFileDialog.FileName, FileMode.Create);
+                range.Save(fileStream, DataFormats.Rtf);
+                fileStream.Close();
+            }
         }
 
         private void documentRichTextBox_SelectionChanged(object sender, RoutedEventArgs e)
@@ -52,6 +77,15 @@ namespace _2024_WpfApp5
 
             var property_underline = documentRichTextBox.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
             underlineToggleButton.IsChecked = (property_underline != DependencyProperty.UnsetValue) && (property_underline.Equals(TextDecorations.Underline));
+
+            var property_fontSize = documentRichTextBox.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+            fontSizeComboBox.SelectedItem = property_fontSize;
+
+            var property_fontFamily = documentRichTextBox.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
+            fontFamilyComboBox.SelectedItem = property_fontFamily.ToString();
+
+            var property_fontColor = documentRichTextBox.Selection.GetPropertyValue(TextElement.ForegroundProperty);
+            fontColorPicker.SelectedColor = ((SolidColorBrush)property_fontColor).Color;
         }
 
         private void fontSizeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -68,6 +102,18 @@ namespace _2024_WpfApp5
             {
                 documentRichTextBox.Selection.ApplyPropertyValue(TextElement.FontFamilyProperty, new FontFamily((string)fontFamilyComboBox.SelectedItem));
             }
+        }
+
+        private void fontColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            fontColor = fontColorPicker.SelectedColor.Value;
+            SolidColorBrush brush = new SolidColorBrush(fontColor);
+            documentRichTextBox.Selection.ApplyPropertyValue(TextElement.ForegroundProperty, brush);
+        }
+
+        private void clearButton_Click(object sender, RoutedEventArgs e)
+        {
+            documentRichTextBox.Document.Blocks.Clear();
         }
     }
 }
