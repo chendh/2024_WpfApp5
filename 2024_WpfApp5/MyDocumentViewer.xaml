@@ -29,21 +29,21 @@
                 </Button>
             </ToolBar>
             <ToolBar x:Name="editingToolBar" Height="40" Width="500" Background="Bisque">
-                <ToggleButton x:Name="boldToggleButton" Width="38" Height="38">
+                <ToggleButton x:Name="boldToggleButton" Width="38" Height="38" Command="EditingCommands.ToggleBold">
                     <Image Height="30" Width="30" Source="/bold.png"/>
                 </ToggleButton>
-                <ToggleButton x:Name="italicToggleButton" Width="38" Height="38">
+                <ToggleButton x:Name="italicToggleButton" Width="38" Height="38" Command="EditingCommands.ToggleItalic">
                     <Image Height="30" Width="30" Source="/italic.png"/>
                 </ToggleButton>
-                <ToggleButton x:Name="underlineToggleButton" Width="38" Height="38">
+                <ToggleButton x:Name="underlineToggleButton" Width="38" Height="38" Command="EditingCommands.ToggleUnderline">
                     <Image Height="30" Width="30" Source="/underline.png"/>
                 </ToggleButton>
                 <xctk:ColorPicker x:Name="fontColorPicker" Width="100" Height="32" SelectedColor="Black" DisplayColorAndName="True"/>
-                <ComboBox x:Name="fontFamilyComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Width="150" Margin="10,0,0,0"/>
-                <ComboBox x:Name="fontSizeComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Width="50" Margin="10,0,0,0"/>
+                <ComboBox x:Name="fontFamilyComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Width="150" Margin="10,0,0,0" SelectionChanged="fontFamilyComboBox_SelectionChanged"/>
+                <ComboBox x:Name="fontSizeComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32" Width="50" Margin="10,0,0,0" SelectionChanged="fontSizeComboBox_SelectionChanged"/>
             </ToolBar>
         </ToolBarTray>
-        <RichTextBox x:Name="documentRichTextBox" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="#FFF4F1E4">
+        <RichTextBox x:Name="documentRichTextBox" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="#FFF4F1E4" SelectionChanged="documentRichTextBox_SelectionChanged">
             <FlowDocument/>
         </RichTextBox>
     </DockPanel>
